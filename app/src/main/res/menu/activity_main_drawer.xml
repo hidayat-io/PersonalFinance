@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_transaction"
+            android:icon="@drawable/ic_trans"
+            android:title="Transaksi" />
+        <item
+            android:id="@+id/nav_budget"
+            android:icon="@drawable/ic_budget"
+            android:title="Anggaran" />
+        <item
+            android:id="@+id/nav_saving"
+            android:icon="@drawable/ic_saving"
+            android:title="Simpanan" />
+        <item
+            android:id="@+id/nav_category"
+            android:icon="@drawable/ic_category"
+            android:title="Kategori" />
+    </group>
+</menu>
