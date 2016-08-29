@@ -2,6 +2,7 @@
 
 package com.iosoft.hidayat.personalfinance;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -61,7 +62,9 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this,"Click on FAB", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this,"Click on FAB", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, TransactionNew.class);
+                startActivity(intent);
             }
         });
 
