@@ -16,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -125,7 +124,7 @@ public class MainActivity extends AppCompatActivity
         }
         else if(id==R.id.nav_category){
 
-            fragmentClass = FragmentCategory.class;
+            fragmentClass = FragmentCategoryIn.class;
         }
 
         try{

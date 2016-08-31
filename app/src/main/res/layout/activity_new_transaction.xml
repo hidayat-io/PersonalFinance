@@ -47,11 +47,14 @@
                 android:src="@drawable/ic_cat_form" />
 
             <EditText
+                android:id="@+id/txtKat"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/text_kategori"
-                android:inputType="none" />
+                android:onClick="showCategoryChoice"
+                android:editable="false"
+                android:focusable="false"/>
         </LinearLayout>
 
         <LinearLayout
@@ -98,10 +101,11 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/txtParam"
+            android:id="@+id/txtIdKat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"/>
+
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

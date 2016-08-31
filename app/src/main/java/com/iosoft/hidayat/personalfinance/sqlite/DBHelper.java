@@ -111,4 +111,32 @@ public class DBHelper{
 
         return arrayTrans;
     }
+
+    public ArrayList<HashMap<String, String>> getCategoryByParam(String param){
+
+        ArrayList<HashMap<String, String>> arrayCategory = new ArrayList<>();
+
+        String sql = "SELECT * FROM kategori WHERE " + param;
+            sql += " ORDER BY id_kat";
+
+        Cursor cursor = myDB.rawQuery(sql, null);
+
+        if(cursor.moveToFirst()){
+
+            do{
+
+                HashMap<String, String> hashMapCategory = new HashMap<>();
+
+                hashMapCategory.put("id", cursor.getString(0));
+                hashMapCategory.put("desk", cursor.getString(1));
+                hashMapCategory.put("type", cursor.getString(2));
+                hashMapCategory.put("cat_ico", cursor.getString(3));
+
+                arrayCategory.add(hashMapCategory);
+
+            }while(cursor.moveToNext());
+        }
+
+        return arrayCategory;
+    }
 }

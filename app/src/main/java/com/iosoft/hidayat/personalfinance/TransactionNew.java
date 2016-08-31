@@ -3,15 +3,18 @@ package com.iosoft.hidayat.personalfinance;
 import java.util.Calendar;
 
 import android.app.DatePickerDialog;
-import android.support.v4.app.DialogFragment;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 /**
  * Created by hidayat on 27/08/16.
@@ -19,7 +22,8 @@ import android.widget.EditText;
 public class TransactionNew extends AppCompatActivity {
 
     private int mYear, mMonth, mDay;
-    EditText txtDate, txtNominal;
+    EditText txtDate, txtNominal, txtKategori, txtIdKategori;
+    ImageView imgCateg;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -33,6 +37,9 @@ public class TransactionNew extends AppCompatActivity {
 
         txtDate = (EditText) findViewById(R.id.txtTgl);
         txtNominal = (EditText) findViewById(R.id.txtNominal);
+        txtKategori = (EditText) findViewById(R.id.txtKat);
+        txtIdKategori = (EditText) findViewById(R.id.txtIdKat);
+        imgCateg = (ImageView)findViewById(R.id.imgCateg);
 
         final Calendar c = Calendar.getInstance();
 
@@ -61,6 +68,36 @@ public class TransactionNew extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    public void showCategoryChoice(View v){
+
+        Intent i = new Intent(TransactionNew.this, TransactionCategory.class);
+        startActivityForResult(i, 1);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+
+        switch (requestCode){
+
+            case 1:
+                if(resultCode == RESULT_OK){
+
+                    Bundle res = data.getExtras();
+                    String result = res.getString("result");
+                    String[] splitResult = result.split("#");
+                    txtKategori.setText(splitResult[0]);
+                    txtIdKategori.setText(splitResult[1]);
+
+                    int imageResource = this.getResources().getIdentifier(splitResult[2],"drawable",
+                            this.getPackageName());
+                    Drawable imgKat = this.getResources().getDrawable(imageResource);
+
+                    imgCateg.setImageDrawable(imgKat);
+                }
+                break;
+        }
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -84,7 +121,15 @@ public class TransactionNew extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 break;
+            case R.id.btrTransOk:
+                saveData();
+                break;
         }
         return true;
+    }
+
+    private void saveData(){
+
+
     }
 }

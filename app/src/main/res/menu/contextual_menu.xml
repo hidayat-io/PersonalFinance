@@ -6,6 +6,6 @@
         android:id="@+id/btrTransOk"
         app:showAsAction="always|withText"
         android:icon="@drawable/ic_done"
-        android:title="OK">
+        android:title="Simpan">
     </item>
 </menu>
