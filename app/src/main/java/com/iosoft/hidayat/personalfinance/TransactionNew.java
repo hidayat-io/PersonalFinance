@@ -28,7 +28,9 @@ public class TransactionNew extends AppCompatActivity {
 
     private DBHelper myDB;
     private int mYear, mMonth, mDay;
-    EditText txtDate, txtNominal, txtKategori, txtIdKategori, txtDesc, txtTypeKat;
+    EditText txtDate, txtNominal, txtKategori,
+            txtIdKategori, txtDesc, txtTypeKat,
+            txtIdTrans;
     ImageView imgCateg;
 
     @Override
@@ -49,17 +51,29 @@ public class TransactionNew extends AppCompatActivity {
         txtKategori = (EditText) findViewById(R.id.txtKat);
         txtIdKategori = (EditText) findViewById(R.id.txtIdKat);
         txtTypeKat = (EditText) findViewById(R.id.txtTypeKat);
+        txtIdTrans = (EditText) findViewById(R.id.txtIdTrans);
         imgCateg = (ImageView)findViewById(R.id.imgCateg);
 
-        final Calendar c = Calendar.getInstance();
+        Intent i = getIntent();
+        String iData = i.getStringExtra("iData");
 
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
+        if(iData==null){ //new transaction
 
+            final Calendar c = Calendar.getInstance();
 
-        txtDate.setText(mDay+"/"+(mMonth+1)+"/"+mYear);
-        txtNominal.requestFocus();
+            mYear = c.get(Calendar.YEAR);
+            mMonth = c.get(Calendar.MONTH);
+            mDay = c.get(Calendar.DAY_OF_MONTH);
+
+            txtDate.setText(mDay+"/"+(mMonth+1)+"/"+mYear);
+            txtNominal.requestFocus();
+        }
+        else{ //edit transaction with paramater iData
+
+            String[] splitData = iData.split("##");
+
+            txtIdTrans.setText(splitData[0]);
+        }
     }
 
     public void showDatePickerDialog(View v) {
@@ -96,7 +110,7 @@ public class TransactionNew extends AppCompatActivity {
                     String[] splitResult = result.split("#");
                     txtKategori.setText(splitResult[0]);
                     txtIdKategori.setText(splitResult[1]);
-                    txtTypeKat.setText(splitResult[2]);
+                    txtTypeKat.setText(splitResult[3]);
 
                     int imageResource = this.getResources().getIdentifier(splitResult[2],"drawable",
                             this.getPackageName());

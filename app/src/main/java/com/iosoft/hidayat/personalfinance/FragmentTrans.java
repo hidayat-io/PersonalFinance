@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iosoft.hidayat.personalfinance.sqlite.DBHelper;
 import com.iosoft.hidayat.personalfinance.adapter.AdapterTransaction;
@@ -41,10 +43,33 @@ public class FragmentTrans extends Fragment {
 
         prepareData();
 
+        TextView txtNoData = (TextView) vroot.findViewById(R.id.txtNoData);
+
+        if(mGroups.size()<1){
+
+            txtNoData.setVisibility(View.VISIBLE);
+        }
+        else{
+
+            txtNoData.setVisibility(View.GONE);
+        }
+
         mAdapter = new AdapterTransaction(getActivity(), mGroups, mChilds);
         mExpandableListView = (ExpandableListView) vroot.findViewById(R.id.listTrans);
 
         mExpandableListView.setAdapter(mAdapter);
+
+        mExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+
+                String iData = mChilds.get(mGroups.get(groupPosition)).get(childPosition);
+                Intent intent = new Intent(getActivity(), TransactionNew.class);
+                intent.putExtra("iData", iData);
+                startActivity(intent);
+                return true;
+            }
+        });
 
         for(int i=0;i<mGroups.size();i++){
 
@@ -61,7 +86,6 @@ public class FragmentTrans extends Fragment {
                 //getActivity().finish();
             }
         });
-
 
         return vroot;
     }

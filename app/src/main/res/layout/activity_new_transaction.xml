@@ -103,6 +103,16 @@
                 android:inputType="textMultiLine|textCapWords" />
         </LinearLayout>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="  Hapus Transaksi"
+            android:id="@+id/btnDelete"
+            android:textAllCaps="false"
+            android:drawableLeft="@drawable/ic_remove_circle"/>
+
+        <!--hidden param -->
         <EditText
             android:id="@+id/txtIdKat"
             android:layout_width="wrap_content"
@@ -115,14 +125,14 @@
             android:layout_height="wrap_content"
             android:visibility="gone"/>
 
-        <Button
+        <EditText
+            android:id="@+id/txtIdTrans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="  Hapus Transaksi"
-            android:id="@+id/btnDelete"
-            android:textAllCaps="false"
-            android:drawableLeft="@drawable/ic_remove_circle"/>
+            android:visibility="gone"/>
+        <!--end hidden param -->
+
+
     </LinearLayout>
 
 

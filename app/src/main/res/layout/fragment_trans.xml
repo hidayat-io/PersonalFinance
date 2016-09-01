@@ -9,7 +9,16 @@
         android:id="@+id/listTrans"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:groupIndicator="@null" />
+        android:groupIndicator="@null"/>
+
+    <TextView
+        android:id="@+id/txtNoData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=":( \n\n Belum Ada Transaksi"
+        android:textAlignment="center"
+        android:paddingTop="16dp"
+        android:visibility="gone"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabAddTrans"
