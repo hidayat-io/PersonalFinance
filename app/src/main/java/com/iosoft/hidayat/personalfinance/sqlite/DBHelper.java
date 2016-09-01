@@ -147,4 +147,25 @@ public class DBHelper{
 
         myDB.execSQL(sql);
     }
+
+    public void updateTransaksi(String tgl,String  tipe, int id_kategori,
+                                String keterangan, int nominal, int id_trans){
+
+        String sql = "UPDATE transaksi SET " +
+                        "tipe='"+tipe+"'," +
+                        "id_kat="+id_kategori+"," +
+                        "desk='"+keterangan+"'," +
+                        "nominal="+nominal+"," +
+                        "tgl='"+tgl+"' " +
+                    "WHERE id_trans= '"+id_trans+"' ";
+
+        myDB.execSQL(sql);
+    }
+
+    public void deleteTransaksi(int id_trans){
+
+        String sql = "DELETE FROM transaksi WHERE id_trans='"+id_trans+"'";
+
+        myDB.execSQL(sql);
+    }
 }

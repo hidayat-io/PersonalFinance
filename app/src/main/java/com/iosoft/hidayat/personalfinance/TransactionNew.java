@@ -4,8 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,7 +34,12 @@ public class TransactionNew extends AppCompatActivity {
     EditText txtDate, txtNominal, txtKategori,
             txtIdKategori, txtDesc, txtTypeKat,
             txtIdTrans;
+    Button btnDelete;
     ImageView imgCateg;
+
+    Locale id = new Locale("in","ID");
+    final Calendar c = Calendar.getInstance();
+    SimpleDateFormat formater = new SimpleDateFormat("EEEE, d MMMM yyyy",id);
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -41,9 +49,10 @@ public class TransactionNew extends AppCompatActivity {
 
         this.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        this.getSupportActionBar().setTitle(R.string.title_new_trans);
 
         setContentView(R.layout.activity_new_transaction);
+
+        btnDelete = (Button) findViewById(R.id.btnDelete);
 
         txtDesc = (EditText) findViewById(R.id.txtDesc);
         txtDate = (EditText) findViewById(R.id.txtTgl);
@@ -59,21 +68,50 @@ public class TransactionNew extends AppCompatActivity {
 
         if(iData==null){ //new transaction
 
-            final Calendar c = Calendar.getInstance();
+            this.getSupportActionBar().setTitle(R.string.title_new_trans);
 
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
             mDay = c.get(Calendar.DAY_OF_MONTH);
 
-            txtDate.setText(mDay+"/"+(mMonth+1)+"/"+mYear);
             txtNominal.requestFocus();
+
+            btnDelete.setVisibility(View.GONE);
         }
         else{ //edit transaction with paramater iData
 
+            this.getSupportActionBar().setTitle(R.string.title_update_trans);
+
             String[] splitData = iData.split("##");
 
+            //hidden field
             txtIdTrans.setText(splitData[0]);
+            txtIdKategori.setText(splitData[3]);
+            txtTypeKat.setText(splitData[2]);
+
+            txtDate.setText(splitData[1]);
+            txtKategori.setText(splitData[6]);
+            txtNominal.setText(splitData[5]);
+            txtDesc.setText(splitData[4]);
+
+            //set image kategori
+            int imageResource = this.getResources().getIdentifier(splitData[7],"drawable",
+                    this.getPackageName());
+            Drawable imgKat = this.getResources().getDrawable(imageResource);
+
+            imgCateg.setImageDrawable(imgKat);
+
+            //format date
+            String[] splittedDate = splitData[1].split("/");
+
+            mYear = Integer.parseInt(splittedDate[0]);
+            mMonth = Integer.parseInt(splittedDate[1])-1;
+            mDay = Integer.parseInt(splittedDate[2]);
+
+            c.set(mYear,mMonth,mDay);
         }
+
+        txtDate.setText(formater.format(c.getTime()));
     }
 
     public void showDatePickerDialog(View v) {
@@ -84,7 +122,14 @@ public class TransactionNew extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
-                        txtDate.setText(dayOfMonth+"/"+(month+1)+"/"+year);
+                        mYear = year;
+                        mMonth = month;
+                        mDay = dayOfMonth;
+
+                        c.set(mYear,mMonth,mDay);
+
+                        txtDate.setText(formater.format(c.getTime()));
+
                     }
 
                 }, mYear, mMonth, mDay);
@@ -155,15 +200,15 @@ public class TransactionNew extends AppCompatActivity {
 
     private void saveData(){
 
-        String iDateText, iCat, iDesc, iAmountText, iType;
+        String iCat, iDesc, iAmountText, iType, idTrans;
         int iAmount, intCat;
         Date iDate = null;
 
-        iDateText = txtDate.getText().toString();
         iCat = txtIdKategori.getText().toString();
         iAmountText = txtNominal.getText().toString();
         iDesc = txtDesc.getText().toString();
         iType = txtTypeKat.getText().toString();
+        idTrans = txtIdTrans.getText().toString();
 
         if(iAmountText.matches("")){
 
@@ -205,28 +250,47 @@ public class TransactionNew extends AppCompatActivity {
             return;
         }
 
-        SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat formatSave = new SimpleDateFormat("yyyy/MM/dd");
         String dateForSave;
 
-        try {
-
-            iDate = formater.parse(iDateText);
-
-        } catch (ParseException e) {
-
-            e.printStackTrace();
-        }
-
-        dateForSave = formatSave.format(iDate);
+        dateForSave = formatSave.format(c.getTime());
 
         intCat = Integer.parseInt(iCat);
 
-        myDB.saveTransaksi(dateForSave, iType, intCat, iDesc, iAmount);
+        if(idTrans.matches("")){ //new transaction
+
+            myDB.saveTransaksi(dateForSave, iType, intCat, iDesc, iAmount);
+        }
+        else{ //update transaction
+
+            myDB.updateTransaksi(dateForSave, iType, intCat, iDesc, iAmount, Integer.parseInt(idTrans));
+        }
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
+    }
+
+    public void deleteTrans(View v){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Anda yakin akan menghapus transaksi ini ?");
+        builder.setIcon(R.drawable.ic_remove_circle);
+        builder.setTitle("Konfirmasi");
+        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                myDB.deleteTransaksi(Integer.parseInt(txtIdTrans.getText().toString()));
+                finish();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
+        builder.setNegativeButton("Tidak",null);
+        builder.show();
     }
 }

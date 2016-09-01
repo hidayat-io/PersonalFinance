@@ -28,9 +28,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/text_tanggal"
-                android:inputType="date"
+                android:inputType="none"
                 android:onClick="showDatePickerDialog"
-                android:focusable="false"/>
+                android:focusable="false"
+                android:editable="false"/>
         </LinearLayout>
 
         <LinearLayout
@@ -110,7 +111,8 @@
             android:text="  Hapus Transaksi"
             android:id="@+id/btnDelete"
             android:textAllCaps="false"
-            android:drawableLeft="@drawable/ic_remove_circle"/>
+            android:drawableLeft="@drawable/ic_remove_circle"
+            android:onClick="deleteTrans"/>
 
         <!--hidden param -->
         <EditText

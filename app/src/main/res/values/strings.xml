@@ -5,6 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="title_new_trans">Transaksi Baru</string>
+    <string name="title_update_trans">Update Transaksi</string>
     <string name="text_nominal">Nominal</string>
     <string name="text_kategori">Pilih Kategori</string>
     <string name="text_keterangan">Keterangan</string>
