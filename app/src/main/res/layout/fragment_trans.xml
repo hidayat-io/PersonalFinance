@@ -5,31 +5,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        app:cardBackgroundColor="@color/colorPrimary"
+        app:cardCornerRadius="0dp"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtTotalIn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="In : 10000"
+                android:textAlignment="center"
+                android:textColor="#fff" />
+
+            <TextView
+                android:id="@+id/txtTotalOut"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Out : 10000"
+                android:textAlignment="center"
+                android:textColor="#fff" />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
     <ExpandableListView
         android:id="@+id/listTrans"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:groupIndicator="@null"/>
+        android:groupIndicator="@null"
+        android:layout_marginBottom="16dp"/>
 
     <TextView
         android:id="@+id/txtNoData"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="16dp"
         android:text=":( \n\n Belum Ada Transaksi"
         android:textAlignment="center"
-        android:paddingTop="16dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabAddTrans"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:src="@drawable/ic_plus"
-        app:layout_anchorGravity="bottom|center|end"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="4dp"/>
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="4dp"
+        android:src="@drawable/ic_plus"
+        app:layout_anchorGravity="bottom|center|end" />
 
 </RelativeLayout>
 

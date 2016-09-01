@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.iosoft.hidayat.personalfinance.sqlite.DBHelper;
 import com.iosoft.hidayat.personalfinance.adapter.AdapterTransaction;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +42,20 @@ public class FragmentTrans extends Fragment {
 
         //call the database
         myDb = new DBHelper(getActivity());
+
+        int[] sumTrans = myDb.getBalance();
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
+
+        formatter.applyPattern("#,###,###");
+        String formattedString = formatter.format(sumTrans[0]-sumTrans[1]);
+
+        getActivity().setTitle("Rp. "+formattedString);
+
+        TextView txtIn = (TextView) vroot.findViewById(R.id.txtTotalIn);
+        TextView txtOut = (TextView) vroot.findViewById(R.id.txtTotalOut);
+
+        txtIn.setText("In : "+formatter.format(sumTrans[0]));
+        txtOut.setText("Out : "+formatter.format(sumTrans[1]));
 
         prepareData();
 

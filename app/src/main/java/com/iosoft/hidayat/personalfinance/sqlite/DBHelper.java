@@ -168,4 +168,21 @@ public class DBHelper{
 
         myDB.execSQL(sql);
     }
+
+    public int[] getBalance(){
+
+        int[] iAmount = new int[2];
+
+        String sql = "select (select sum(nominal) from transaksi where tipe='i') as pemasukan, \n" +
+                "\t(select sum(nominal) from transaksi where tipe='o') as pengeluaran";
+
+        Cursor icur = myDB.rawQuery(sql,null);
+
+        icur.moveToFirst();
+
+        iAmount[0] = icur.getInt(0);
+        iAmount[1] = icur.getInt(1);
+
+        return iAmount;
+    }
 }

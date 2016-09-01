@@ -1,13 +1,20 @@
 package com.iosoft.hidayat.personalfinance.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.ActionBarOverlayLayout;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutCompat;
+import android.widget.LinearLayout.LayoutParams;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iosoft.hidayat.personalfinance.R;
@@ -153,6 +160,28 @@ public class AdapterTransaction extends BaseExpandableListAdapter{
         txtKategori.setText(detailText[6]);
         txtNominal.setText(myFormat.format(nominal));
         imgKategori.setImageDrawable(imgKat);
+
+        if(detailText[2].matches("i")){
+
+            txtNominal.setTextColor(Color.BLUE);
+        }
+        else if(detailText[2].matches("o")){
+
+            txtNominal.setTextColor(Color.RED);
+        }
+
+
+//        if(isLastChild){
+//
+//            LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+//            final float scale = mContext.getResources().getDisplayMetrics().density;
+//            int int10dp = (int) (10 * scale + 0.5f);
+//            params.setMargins(0,0,0,int10dp);
+//            CardView cardDetail = (CardView) convertView.findViewById(R.id.cardDetail);
+//            cardDetail.setLayoutParams(params);
+//
+//            txtDeskripsi.setText(txtDeskripsi.getText().toString()+" akhir.");
+//        }
 
         return convertView;
     }

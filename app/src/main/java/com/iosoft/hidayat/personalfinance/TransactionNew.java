@@ -1,5 +1,7 @@
 package com.iosoft.hidayat.personalfinance;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,6 +15,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,6 +66,8 @@ public class TransactionNew extends AppCompatActivity {
         txtTypeKat = (EditText) findViewById(R.id.txtTypeKat);
         txtIdTrans = (EditText) findViewById(R.id.txtIdTrans);
         imgCateg = (ImageView)findViewById(R.id.imgCateg);
+
+        txtNominal.addTextChangedListener(onNominalChangeListener());
 
         Intent i = getIntent();
         String iData = i.getStringExtra("iData");
@@ -198,6 +204,52 @@ public class TransactionNew extends AppCompatActivity {
         return true;
     }
 
+    private TextWatcher onNominalChangeListener(){
+
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                txtNominal.removeTextChangedListener(this);
+
+                try {
+
+                    String oriString = s.toString();
+                    Long longVal;
+
+                    if(oriString.contains(",")){
+                        oriString = oriString.replaceAll(",","");
+                    }
+                    longVal = Long.parseLong(oriString);
+
+                    DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
+
+                    formatter.applyPattern("#,###,###");
+                    String formattedString = formatter.format(longVal);
+
+                    txtNominal.setText(formattedString);
+                    txtNominal.setSelection(txtNominal.getText().length());
+
+                }catch (NumberFormatException nfe){
+
+                    nfe.printStackTrace();
+                }
+
+                txtNominal.addTextChangedListener(this);
+            }
+        };
+    }
+
     private void saveData(){
 
         String iCat, iDesc, iAmountText, iType, idTrans;
@@ -206,6 +258,7 @@ public class TransactionNew extends AppCompatActivity {
 
         iCat = txtIdKategori.getText().toString();
         iAmountText = txtNominal.getText().toString();
+        iAmountText = iAmountText.replace(",","");
         iDesc = txtDesc.getText().toString();
         iType = txtTypeKat.getText().toString();
         idTrans = txtIdTrans.getText().toString();
