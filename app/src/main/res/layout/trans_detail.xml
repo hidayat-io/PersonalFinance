@@ -24,7 +24,8 @@
                 android:id="@+id/imgCateg"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/ic_cat_food" />
+                android:src="@drawable/ic_cat_food"
+                android:layout_gravity="center_vertical" />
 
             <LinearLayout
                 android:layout_width="0dp"

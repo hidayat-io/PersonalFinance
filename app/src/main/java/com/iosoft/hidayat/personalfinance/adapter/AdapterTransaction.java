@@ -98,7 +98,7 @@ public class AdapterTransaction extends BaseExpandableListAdapter{
         Date iDate = null;
         SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
         SimpleDateFormat formatHari = new SimpleDateFormat("EEEE", id);
-        SimpleDateFormat formatTgl = new SimpleDateFormat("d", id);
+        SimpleDateFormat formatTgl = new SimpleDateFormat("dd", id);
         SimpleDateFormat formatBulan = new SimpleDateFormat("MMMM yyyy", id);
 
         try {

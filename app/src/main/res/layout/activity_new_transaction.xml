@@ -36,7 +36,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:onClick="showCategoryChoice">
 
             <ImageView
                 android:id="@+id/imgCateg"
@@ -44,7 +45,8 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_cat_form" />
+                android:src="@drawable/ic_cat_form"
+                android:onClick="showCategoryChoice"/>
 
             <EditText
                 android:id="@+id/txtKat"
@@ -93,11 +95,12 @@
                 android:src="@drawable/ic_detail" />
 
             <EditText
+                android:id="@+id/txtDesc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/text_keterangan"
-                android:inputType="textMultiLine|textCapSentences" />
+                android:inputType="textMultiLine|textCapWords" />
         </LinearLayout>
 
         <EditText
@@ -106,7 +109,24 @@
             android:layout_height="wrap_content"
             android:visibility="gone"/>
 
+        <EditText
+            android:id="@+id/txtTypeKat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="  Hapus Transaksi"
+            android:id="@+id/btnDelete"
+            android:textAllCaps="false"
+            android:drawableLeft="@drawable/ic_remove_circle"/>
     </LinearLayout>
+
+
 </android.support.v7.widget.CardView>
+
+
 

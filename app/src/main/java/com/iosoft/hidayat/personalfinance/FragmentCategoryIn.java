@@ -62,7 +62,8 @@ public class FragmentCategoryIn extends Fragment{
                 Bundle conData = new Bundle();
                 conData.putString("result", category.getDescription()+"#"+
                         category.getId()+"#"+
-                        category.getIcon());
+                        category.getIcon()+"#"+
+                        category.getType());
 
                 Intent i = new Intent();
                 i.putExtras(conData);

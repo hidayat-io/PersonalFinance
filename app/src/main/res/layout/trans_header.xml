@@ -23,16 +23,18 @@
                 android:id="@+id/txvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="27"
-                android:textSize="32sp"
-                android:textColor="#000"/>
+                android:text="30"
+                android:textSize="36sp"
+                android:textColor="#000"
+                android:layout_gravity="center_vertical"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="2dp">
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/txvDay"

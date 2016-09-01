@@ -18,8 +18,6 @@ public class FragmentBudget extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         ViewGroup iView = (ViewGroup) inflater.inflate(R.layout.fragment_budget,null);
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fabAdd);
-        fab.hide();
         return iView;
     }
 }

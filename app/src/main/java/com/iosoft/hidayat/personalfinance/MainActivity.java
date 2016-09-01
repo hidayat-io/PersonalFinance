@@ -57,15 +57,15 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Toast.makeText(MainActivity.this,"Click on FAB", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, TransactionNew.class);
-                startActivity(intent);
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                Intent intent = new Intent(MainActivity.this, TransactionNew.class);
+//                startActivity(intent);
+//            }
+//        });
 
     }
 

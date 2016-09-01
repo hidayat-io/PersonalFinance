@@ -43,14 +43,14 @@ public class DBHelper{
 
         //sample data
         //-- sample transaksi
-        myDB.execSQL("DELETE FROM transaksi");
-        myDB.execSQL("insert into transaksi('tipe','id_kat','desk','nominal','id_simp','tgl') values('o',10,'Simpanan Pembaruan SIM',10000,1,'2016/08/01')");
-        myDB.execSQL("insert into transaksi('tipe','id_kat','desk','nominal','tgl') values('o',1,'Dinner',20000,'2016/08/01')");
-        myDB.execSQL("insert into transaksi('tipe','id_kat','desk','nominal','tgl') values('o',2,'Tagihan Firstmedia Juli',500000,'2016/08/01')");
-        myDB.execSQL("insert into transaksi('tipe','id_kat','desk','nominal','tgl') values('o',3,'Kondangan Si Fulan',90000,'2016/08/02')");
-        myDB.execSQL("insert into transaksi('tipe','id_kat','desk','nominal','tgl') values('o',1,'Makan Siang',10000,'2016/08/02')");
-        myDB.execSQL("insert into transaksi('tipe','id_kat','desk','nominal','tgl') values('o',2,'Internet Indosat',75000,'2016/08/03')");
-        myDB.execSQL("insert into transaksi('tipe','id_kat','desk','nominal','tgl') values('o',3,'Kado for Si Fulanah',20000,'2016/08/03')");
+//        myDB.execSQL("DELETE FROM transaksi");
+//        myDB.execSQL("insert into transaksi('tipe','id_kat','desk','nominal','id_simp','tgl') values('o',10,'Simpanan Pembaruan SIM',10000,1,'2016/08/01')");
+//        myDB.execSQL("insert into transaksi('tipe','id_kat','desk','nominal','tgl') values('o',1,'Dinner',20000,'2016/08/01')");
+//        myDB.execSQL("insert into transaksi('tipe','id_kat','desk','nominal','tgl') values('o',2,'Tagihan Firstmedia Juli',500000,'2016/08/01')");
+//        myDB.execSQL("insert into transaksi('tipe','id_kat','desk','nominal','tgl') values('o',3,'Kondangan Si Fulan',90000,'2016/08/02')");
+//        myDB.execSQL("insert into transaksi('tipe','id_kat','desk','nominal','tgl') values('o',1,'Makan Siang',10000,'2016/08/02')");
+//        myDB.execSQL("insert into transaksi('tipe','id_kat','desk','nominal','tgl') values('o',2,'Internet Indosat',75000,'2016/08/03')");
+//        myDB.execSQL("insert into transaksi('tipe','id_kat','desk','nominal','tgl') values('o',3,'Kado for Si Fulanah',20000,'2016/08/03')");
 
         //-- sample kategori
         myDB.execSQL("DELETE FROM kategori");
@@ -85,7 +85,7 @@ public class DBHelper{
         ArrayList<HashMap<String, String>> arrayTrans = new ArrayList<HashMap<String, String>>();
 
         String sql = "SELECT * FROM transaksi INNER JOIN kategori ON transaksi.id_kat = kategori.id_kat";
-                sql+=" WHERE tgl='"+iDate+"';";
+                sql+=" WHERE tgl='"+iDate+"' ORDER BY id_trans DESC;";
 
         Cursor cursor = myDB.rawQuery(sql,null);
 
@@ -138,5 +138,14 @@ public class DBHelper{
         }
 
         return arrayCategory;
+    }
+
+    public void saveTransaksi(String tgl,String  tipe, int id_kategori,
+                              String keterangan, int nominal){
+
+        String sql = "INSERT INTO transaksi('tipe','id_kat','desk','nominal','tgl') " +
+                "VALUES('"+tipe+"',"+id_kategori+","+"'"+keterangan+"',"+nominal+","+"'"+tgl+"')";
+
+        myDB.execSQL(sql);
     }
 }

@@ -1,5 +1,6 @@
 package com.iosoft.hidayat.personalfinance;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -33,9 +34,6 @@ public class FragmentTrans extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fabAdd);
-        fab.show();
-
         ViewGroup vroot = (ViewGroup) inflater.inflate(R.layout.fragment_trans, container, false);
 
         //call the database
@@ -52,6 +50,18 @@ public class FragmentTrans extends Fragment {
 
             mExpandableListView.expandGroup(i);
         }
+
+        FloatingActionButton fab = (FloatingActionButton) vroot.findViewById(R.id.fabAddTrans);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getActivity(), TransactionNew.class);
+                startActivity(intent);
+                //getActivity().finish();
+            }
+        });
+
 
         return vroot;
     }
@@ -90,8 +100,6 @@ public class FragmentTrans extends Fragment {
             }
 
             mChilds.put(iDate, transDetail);
-
-
         }
     }
 }
