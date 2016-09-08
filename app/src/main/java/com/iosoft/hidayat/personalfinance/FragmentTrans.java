@@ -112,8 +112,8 @@ public class FragmentTrans extends Fragment {
         mDate = myDb.getTransDate();
 
 
-        mGroups = new ArrayList<String>();
-        mChilds = new HashMap<String, List<String>>();
+        mGroups = new ArrayList<>();
+        mChilds = new HashMap<>();
 
         for(int i=0;i<mDate.size();i++){
 
@@ -123,7 +123,7 @@ public class FragmentTrans extends Fragment {
             //get detail transaction by date
             mTrans = myDb.getTransListByDate(iDate);
 
-            List<String> transDetail = new ArrayList<String>();
+            List<String> transDetail = new ArrayList<>();
 
             for (int x=0;x<mTrans.size();x++){
 
