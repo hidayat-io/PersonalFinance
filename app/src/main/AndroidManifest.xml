@@ -3,6 +3,7 @@
     package="com.iosoft.hidayat.personalfinance">
 
     <application
+        android:name=".MyApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_wallet"
         android:label="@string/app_name"
@@ -26,7 +27,18 @@
         </activity>
         <activity android:name=".TransactionCategory"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.CategoryChoice"></activity>
+            android:theme="@style/AppTheme.CategoryChoice">
+        </activity>
+        <activity
+            android:name="com.iosoft.hidayat.personalfinance.BudgetNew"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NewDialog">
+        </activity>
+        <activity android:name=".BudgetCategory"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.CategoryChoice">
+        </activity>
     </application>
+
 
 </manifest>

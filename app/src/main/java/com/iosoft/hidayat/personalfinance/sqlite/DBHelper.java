@@ -54,29 +54,45 @@ public class DBHelper{
 
 
         //-- sample kategori
-//        myDB.execSQL("DELETE FROM kategori");
-//        myDB.execSQL("INSERT INTO kategori values('1','Makanan & Minuman','o','ic_cat_food')");
-//        myDB.execSQL("INSERT INTO kategori values('2','Tagihan & Utilitas','o','ic_cat_bill')");
-//        myDB.execSQL("INSERT INTO kategori values('3','Teman & Kekasih','o','ic_cat_friend')");
-//        myDB.execSQL("INSERT INTO kategori values('4','Gaji','i','ic_cat_salary')");
-//        myDB.execSQL("INSERT INTO kategori values('10','Simpanan','o','ic_saving')");
+        myDB.execSQL("DELETE FROM kategori");
+        myDB.execSQL("INSERT INTO kategori values('1','Makanan & Minuman','o','ic_cat_food')");
+        myDB.execSQL("INSERT INTO kategori values('2','Tagihan & Utilitas','o','ic_cat_bill')");
+        myDB.execSQL("INSERT INTO kategori values('3','Teman & Kekasih','o','ic_cat_friend')");
+        myDB.execSQL("INSERT INTO kategori values('4','Gaji','i','ic_cat_salary')");
+        myDB.execSQL("INSERT INTO kategori values('5','Award','i','ic_cat_award')");
+        myDB.execSQL("INSERT INTO kategori values('6','Hadiah','i','ic_cat_gift')");
+        myDB.execSQL("INSERT INTO kategori values('7','Penjualan','i','ic_cat_sell')");
+        myDB.execSQL("INSERT INTO kategori values('8','Pinjaman','i','ic_cat_debt')");
+        myDB.execSQL("INSERT INTO kategori values('9','Pemasukan Lain-lain','i','ic_cat_other_in')");
+        myDB.execSQL("INSERT INTO kategori values('10','Simpanan','o','ic_saving')");
+        myDB.execSQL("INSERT INTO kategori values('11','Hiburan','o','ic_cat_entertainment')");
+        myDB.execSQL("INSERT INTO kategori values('12','Pendidikan','o','ic_cat_education')");
+        myDB.execSQL("INSERT INTO kategori values('13','Keluarga','o','ic_cat_family')");
+        myDB.execSQL("INSERT INTO kategori values('14','Rumah Tangga','o','ic_cat_home')");
+        myDB.execSQL("INSERT INTO kategori values('15','Investasi','o','ic_cat_invest')");
+        myDB.execSQL("INSERT INTO kategori values('17','Kesehatan','o','ic_cat_medical')");
+        myDB.execSQL("INSERT INTO kategori values('18','Belanja','o','ic_cat_shopping')");
+        myDB.execSQL("INSERT INTO kategori values('19','Transportasi','o','ic_cat_transport')");
+        myDB.execSQL("INSERT INTO kategori values('20','Travel','o','ic_cat_travel')");
+        myDB.execSQL("INSERT INTO kategori values('21','Dipinjamkan','o','ic_cat_loan')");
+        myDB.execSQL("INSERT INTO kategori values('22','Pengeluaran Lain-lain','o','ic_cat_other_out')");
 
         //-- sample data anggaran
-        myDB.execSQL("DELETE FROM anggaran");
+//        myDB.execSQL("DELETE FROM anggaran");
 
-        String[] sqlAnggaran = new String[3];
-
-        sqlAnggaran[0] = "INSERT INTO anggaran(bulan, jml_angg, kat_angg) " +
-                "VALUES('1609', 200000, 1)";
-        sqlAnggaran[1] = "INSERT INTO anggaran(bulan, jml_angg, kat_angg) " +
-                "VALUES('1609', 200000, 2)";
-        sqlAnggaran[2] = "INSERT INTO anggaran(bulan, jml_angg, kat_angg) " +
-                "VALUES('1609', 150000, 3)";
-
-        for (int i=0;i<sqlAnggaran.length;i++){
-
-            myDB.execSQL(sqlAnggaran[i]);
-        }
+//        String[] sqlAnggaran = new String[3];
+//
+//        sqlAnggaran[0] = "INSERT INTO anggaran(bulan, jml_angg, kat_angg) " +
+//                "VALUES('1609', 200000, 1)";
+//        sqlAnggaran[1] = "INSERT INTO anggaran(bulan, jml_angg, kat_angg) " +
+//                "VALUES('1609', 200000, 2)";
+//        sqlAnggaran[2] = "INSERT INTO anggaran(bulan, jml_angg, kat_angg) " +
+//                "VALUES('1609', 150000, 3)";
+//
+//        for (int i=0;i<sqlAnggaran.length;i++){
+//
+//            myDB.execSQL(sqlAnggaran[i]);
+//        }
 
     }
 
@@ -249,5 +265,31 @@ public class DBHelper{
         int totalAmount = icur.getInt(0);
 
         return totalAmount;
+    }
+
+    public void saveBudget(String bulan, int jml_angg, int kat_angg){
+
+        String sql = "INSERT INTO anggaran(bulan,jml_angg,kat_angg)" +
+                " VALUES('"+bulan+"',"+jml_angg+","+kat_angg+")";
+
+        myDB.execSQL(sql);
+    }
+    public boolean validBudget(String bulan, int kat_angg){
+
+        boolean validBudget;
+        String sql = "SELECT * FROM anggaran WHERE bulan='"+bulan+"' AND kat_angg="+kat_angg;
+
+        Cursor icur = myDB.rawQuery(sql,null);
+
+        if(icur.getCount() > 0){
+
+            validBudget = false;
+        }
+        else{
+
+            validBudget = true;
+        }
+
+        return validBudget;
     }
 }

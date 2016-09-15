@@ -2,6 +2,8 @@
 
 package com.iosoft.hidayat.personalfinance;
 
+import com.iosoft.hidayat.personalfinance.MyApp;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -35,34 +38,33 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
-        if(savedInstanceState==null){
+        MyApp mApp = ((MyApp)getApplicationContext());
+        int selectedMenu = mApp.getSelectedMenu();
 
-            Fragment fragment = null;
-            Class fragmentClass = FragmentTrans.class;
+        if(selectedMenu==0){
 
-            try{
-
-                fragment = (Fragment) fragmentClass.newInstance();
-            }
-            catch (Exception e){
-
-                e.printStackTrace();
-            }
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-        }
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAdd);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
+//            Fragment fragment = null;
+//            Class fragmentClass = FragmentTrans.class;
 //
-//                Intent intent = new Intent(MainActivity.this, TransactionNew.class);
-//                startActivity(intent);
+//            try{
+//
+//                fragment = (Fragment) fragmentClass.newInstance();
 //            }
-//        });
+//            catch (Exception e){
+//
+//                e.printStackTrace();
+//            }
+//
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+            navigationView.setCheckedItem(R.id.nav_transaction);
+            navigationView.getMenu().performIdentifierAction(R.id.nav_transaction, 0);
+        }
+        else{
 
+            displayView(selectedMenu);
+            navigationView.setCheckedItem(selectedMenu);
+        }
     }
 
     @Override
@@ -97,14 +99,23 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        displayView(item.getItemId());
+        return true;
+    }
+
+    private void displayView(int id){
+
+        MyApp mApp = (MyApp)getApplicationContext();
+        mApp.setSelectedMenu(id);
 
         Fragment fragment = null;
         Class fragmentClass = null;
+
+
 
         if (id == R.id.nav_transaction) {
 
@@ -137,6 +148,5 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 }

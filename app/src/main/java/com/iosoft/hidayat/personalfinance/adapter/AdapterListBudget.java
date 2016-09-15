@@ -1,6 +1,7 @@
 package com.iosoft.hidayat.personalfinance.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -12,11 +13,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.iosoft.hidayat.personalfinance.BudgetNew;
 import com.iosoft.hidayat.personalfinance.R;
+import com.iosoft.hidayat.personalfinance.TransactionNew;
 import com.iosoft.hidayat.personalfinance.model.Budget;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +30,7 @@ import java.util.List;
 public class AdapterListBudget extends RecyclerView.Adapter<AdapterListBudget.MyViewHolder> {
 
     private List<Budget> budgetList;
+
 
     public AdapterListBudget(List<Budget> budgetList){
 
@@ -36,6 +42,7 @@ public class AdapterListBudget extends RecyclerView.Adapter<AdapterListBudget.My
         public ProgressBar pb_budget;
         public ImageView ic_budget;
         public TextView txtBudgetDesc, txtBudgetUsed, txtBudgetAmount;
+        public Budget iBudget;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -44,6 +51,20 @@ public class AdapterListBudget extends RecyclerView.Adapter<AdapterListBudget.My
             txtBudgetUsed = (TextView) itemView.findViewById(R.id.txtBudgetUsed);
             txtBudgetAmount = (TextView) itemView.findViewById(R.id.txtBudgetAmount);
             pb_budget = (ProgressBar) itemView.findViewById(R.id.progressBar);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+//                    ArrayList iBudgetList = new ArrayList();
+//                    iBudgetList.add(iBudget);
+
+                    Intent i = new Intent(v.getContext(), BudgetNew.class);
+                    i.putExtra("budget", iBudget);
+                    v.getContext().startActivity(i);
+                }
+            });
+
         }
     }
 
@@ -80,12 +101,17 @@ public class AdapterListBudget extends RecyclerView.Adapter<AdapterListBudget.My
         else{
 
             percentUsed=(budgetUsed*100)/budgetAmount;
+
+            //set progress bar color to BLUE
+            holder.pb_budget.getProgressDrawable().setColorFilter(
+                    Color.BLUE, android.graphics.PorterDuff.Mode.SRC_IN);
         }
 
         holder.txtBudgetDesc.setText(budget.getDesc());
         holder.txtBudgetAmount.setText(myFormat.format(budgetAmount));
         holder.txtBudgetUsed.setText(myFormat.format(budgetUsed));
         holder.pb_budget.setProgress(percentUsed);
+        holder.iBudget = budget;
 
 
         int imageResource = mContext.getResources().getIdentifier(budget.getIcon(), "drawable", mContext.getPackageName());

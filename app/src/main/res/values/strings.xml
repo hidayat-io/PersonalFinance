@@ -10,4 +10,6 @@
     <string name="text_kategori">Pilih Kategori</string>
     <string name="text_keterangan">Keterangan</string>
     <string name="text_tanggal">Tanggal</string>
+    <string name="title_new_budget">Anggaran Baru</string>
+    <string name="title_update_budget">Update Anggaran</string>
 </resources>

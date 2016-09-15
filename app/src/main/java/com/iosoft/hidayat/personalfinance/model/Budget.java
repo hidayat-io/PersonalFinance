@@ -1,9 +1,12 @@
 package com.iosoft.hidayat.personalfinance.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by hidayat on 07/09/16.
  */
-public class Budget {
+public class Budget implements Parcelable{
 
     private String desc, icon;
     private int id_budget;
@@ -11,7 +14,15 @@ public class Budget {
     private int budget_amount;
     private int budget_used;
 
-    public Budget(){ }
+    public Budget(Parcel source){
+
+        id_budget = source.readInt();
+        desc = source.readString();
+        icon = source.readString();
+        id_category = source.readInt();
+        budget_amount = source.readInt();
+        budget_used = source.readInt();
+    }
 
     public Budget(int id_budget, String desc, String icon,
                         int id_category, int budget_amount, int budget_used){
@@ -83,4 +94,34 @@ public class Budget {
 
         this.budget_used = budget_used;
     }
+
+    @Override
+    public int describeContents() {
+
+        return this.hashCode();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeInt(id_budget);
+        dest.writeString(desc);
+        dest.writeString(icon);
+        dest.writeInt(id_category);
+        dest.writeInt(budget_amount);
+        dest.writeInt(budget_used);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator(){
+
+        public Budget createFromParcel(Parcel in){
+
+            return new Budget(in);
+        }
+
+        public Budget[] newArray(int size){
+
+            return new Budget[size];
+        }
+    };
 }

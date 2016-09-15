@@ -1,7 +1,8 @@
 package com.iosoft.hidayat.personalfinance;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,14 +36,14 @@ public class FragmentBudget extends Fragment {
     private AdapterListBudget mAdapter;
     private DBHelper myDB;
     private ArrayList<HashMap<String, String>> dataBudget;
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        ViewGroup iView = (ViewGroup) inflater.inflate(R.layout.fragment_budget,null);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        container = (ViewGroup) inflater.inflate(R.layout.fragment_budget,null);
 
         getActivity().setTitle("Anggaran");
-        recyclerView = (RecyclerView) iView.findViewById(R.id.rv_budget);
+        recyclerView = (RecyclerView) container.findViewById(R.id.rv_budget);
         myDB = new DBHelper(getContext());
         mAdapter = new AdapterListBudget(budgetList);
 
@@ -54,7 +55,18 @@ public class FragmentBudget extends Fragment {
 
         prepareData();
 
-        return iView;
+        FloatingActionButton fab = (FloatingActionButton) container.findViewById(R.id.fabAddBudget);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getActivity(), BudgetNew.class);
+                startActivity(intent);
+                //getActivity().finish();
+            }
+        });
+
+        return container;
     }
 
     private void prepareData(){
