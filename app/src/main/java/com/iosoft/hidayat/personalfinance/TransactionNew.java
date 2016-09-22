@@ -252,9 +252,8 @@ public class TransactionNew extends AppCompatActivity {
 
     private void saveData(){
 
-        String iCat, iDesc, iAmountText, iType, idTrans;
+        String iCat, iDesc, iAmountText, iType, idTrans, iKatDesc;
         int iAmount, intCat;
-        Date iDate = null;
 
         iCat = txtIdKategori.getText().toString();
         iAmountText = txtNominal.getText().toString();
@@ -262,6 +261,7 @@ public class TransactionNew extends AppCompatActivity {
         iDesc = txtDesc.getText().toString();
         iType = txtTypeKat.getText().toString();
         idTrans = txtIdTrans.getText().toString();
+        iKatDesc = txtKategori.getText().toString();
 
         if(iAmountText.matches("")){
 
@@ -319,9 +319,39 @@ public class TransactionNew extends AppCompatActivity {
             myDB.updateTransaksi(dateForSave, iType, intCat, iDesc, iAmount, Integer.parseInt(idTrans));
         }
 
+        //validate is the amount already overbudget or not
+        if(iType.matches("o")){
+
+            SimpleDateFormat formatBudgetDate = new SimpleDateFormat("yyyy/MM");
+            SimpleDateFormat formatBudgetMonth = new SimpleDateFormat("yyMM");
+            String startDate, endDate;
+
+            startDate = formatBudgetDate.format(c.getTime())+"/01";
+            endDate  =formatBudgetDate.format(c.getTime())+"/"+c.getActualMaximum(c.DATE);
+            int totalUsedBudget = myDB.getTotalAmountTransaction(intCat,startDate,endDate);
+            int totalBudget = myDB.getBudgetAmount(formatBudgetMonth.format(c.getTime()),intCat);
+            int finalBudgetAmount = totalUsedBudget+iAmount;
+
+            if(finalBudgetAmount>totalBudget){
+
+                SimpleDateFormat formatNotifTime = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                Calendar cal = Calendar.getInstance();
+
+                int overBudget = finalBudgetAmount-totalBudget;
+
+                DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
+                formatter.applyPattern("#,###,###");
+                String formattedString = formatter.format(overBudget);
+
+                String message = "Total transaski pengeluaran melebihi anggaran Rp. "+formattedString+". ";
+                message+="Anggaran untuk kategori : "+iKatDesc;
+
+                myDB.saveNotif(formatNotifTime.format(cal.getTime()),message);
+            }
+        }
+
         finish();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
     }

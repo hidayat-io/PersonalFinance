@@ -121,7 +121,8 @@ public class FragmentTrans extends Fragment {
             mGroups.add(iDate);
 
             //get detail transaction by date
-            mTrans = myDb.getTransListByDate(iDate);
+            String param = " tgl='"+iDate+"' ";
+            mTrans = myDb.getTransListByParam(param);
 
             List<String> transDetail = new ArrayList<>();
 

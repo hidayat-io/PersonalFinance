@@ -7,9 +7,6 @@ public class Category {
 
     private String id_cat, icon, description, type;
 
-    public Category(){
-
-    }
 
     public Category(String id_cat, String icon, String description, String type){
 

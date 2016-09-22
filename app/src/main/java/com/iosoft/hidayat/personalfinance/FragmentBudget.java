@@ -99,7 +99,8 @@ public class FragmentBudget extends Fragment {
                         dataBudget.get(i).get("icon"),
                         idCategory,
                         parseInt(dataBudget.get(i).get("budget_amount")),
-                        budgetUsed);
+                        budgetUsed,
+                        dataBudget.get(i).get("budget_month"));
 
             budgetList.add(budget);
         }

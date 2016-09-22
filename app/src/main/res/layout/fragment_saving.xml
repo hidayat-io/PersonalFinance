@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFDEDDDD">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_saving"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ini Menu Simpanan"/>
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"/>
 
-    <ListView
-        android:layout_width="match_parent"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAddSaving"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:layout_gravity="center_horizontal" />
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="4dp"
+        android:src="@drawable/ic_plus"
+        app:layout_anchorGravity="bottom|center|end" />
+
+</RelativeLayout>

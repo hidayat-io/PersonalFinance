@@ -2,26 +2,25 @@ package com.iosoft.hidayat.personalfinance.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
+
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.iosoft.hidayat.personalfinance.BudgetNew;
 import com.iosoft.hidayat.personalfinance.R;
-import com.iosoft.hidayat.personalfinance.TransactionNew;
 import com.iosoft.hidayat.personalfinance.model.Budget;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+
 import java.util.List;
 
 /**
@@ -55,9 +54,6 @@ public class AdapterListBudget extends RecyclerView.Adapter<AdapterListBudget.My
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-//                    ArrayList iBudgetList = new ArrayList();
-//                    iBudgetList.add(iBudget);
 
                     Intent i = new Intent(v.getContext(), BudgetNew.class);
                     i.putExtra("budget", iBudget);

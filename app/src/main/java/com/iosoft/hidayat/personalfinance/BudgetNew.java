@@ -8,6 +8,10 @@ import android.support.annotation.BoolRes;
 import android.support.annotation.StringDef;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -18,13 +22,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.iosoft.hidayat.personalfinance.adapter.AdapterListBudgetTransaction;
 import com.iosoft.hidayat.personalfinance.model.Budget;
+import com.iosoft.hidayat.personalfinance.model.Transaction;
 import com.iosoft.hidayat.personalfinance.sqlite.DBHelper;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Locale;
 
 
 /**
@@ -85,6 +97,77 @@ public class BudgetNew extends AppCompatActivity {
             Drawable imgKat = this.getResources().getDrawable(imageResource);
 
             imgCateg.setImageDrawable(imgKat);
+
+            //load list transaction to recyclerview
+            String strMonth, startDate, endDate, iYear, iMonth;
+            SimpleDateFormat formaterMonth = new SimpleDateFormat("yyyy/MM/");
+
+            strMonth = iData.getBudget_month();
+            iYear = "20"+strMonth.substring(0,2);
+            iMonth = strMonth.substring(2);
+            Calendar calendar = new GregorianCalendar(Integer.parseInt(iYear),
+                                                        Integer.parseInt(iMonth)-1,1);
+
+            startDate = formaterMonth.format(calendar.getTime())+"01";
+            endDate = formaterMonth.format(calendar.getTime())+calendar.getActualMaximum(calendar.DATE);
+
+            String param = " transaksi.id_kat ='" + iData.getIdCategory() + "' "+
+                                "AND (tgl BETWEEN '"+startDate+"' AND '"+endDate+"')";
+
+            ArrayList<HashMap<String, String>> transData = myDB.getTransListByParam(param);
+            ArrayList<Object> items = new ArrayList<>();
+            String strTransDate = "";
+
+            if(transData.size()>0){
+
+                for (int x=0;x<transData.size();x++){
+
+                    //on different date, add new header Date
+                    if(!strTransDate.matches(transData.get(x).get("tgl"))){
+
+                        String strDate = transData.get(x).get("tgl");
+                        Date iDate = null;
+                        Locale id = new Locale("in","ID");
+                        SimpleDateFormat formater = new SimpleDateFormat("yyyy/MM/dd");
+
+                        try {
+
+                            iDate = formater.parse(strDate);
+
+                        } catch (ParseException e) {
+
+                            e.printStackTrace();
+                        }
+
+                        SimpleDateFormat formatTransDate = new SimpleDateFormat("dd MMMM yyyy", id);
+
+                        items.add(formatTransDate.format(iDate));
+                    }
+
+
+                    Transaction itemTrans = new Transaction(Integer.parseInt(transData.get(x).get("id_trans")),
+                            transData.get(x).get("tgl"),
+                            transData.get(x).get("desk"),
+                            Integer.parseInt(transData.get(x).get("id_kat")),
+                            transData.get(x).get("tipe"),
+                            transData.get(x).get("kat"),
+                            transData.get(x).get("ic_kat"),
+                            Integer.parseInt(transData.get(x).get("nominal"))
+                    );
+                    items.add(itemTrans);
+
+                    strTransDate = transData.get(x).get("tgl");
+                }
+            }
+
+            AdapterListBudgetTransaction mAdapter = new AdapterListBudgetTransaction(items);
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rvListTransaction);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this, OrientationHelper.VERTICAL,false);
+
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(mAdapter);
         }
 
     }
@@ -266,7 +349,7 @@ public class BudgetNew extends AppCompatActivity {
         }
         else{ //update transaction
 
-            //myDB.updateTransaksi(dateForSave, iType, intCat, iDesc, iAmount, Integer.parseInt(idTrans));
+            myDB.updateBudget(Integer.parseInt(idBudget),iAmount,intCat);
         }
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -275,17 +358,17 @@ public class BudgetNew extends AppCompatActivity {
         finish();
     }
 
-    public void deleteTrans(View v){
+    public void deleteBudget(View v){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Anda yakin akan menghapus transaksi ini ?");
+        builder.setMessage("Anda yakin akan menghapus anggaran ini ?");
         builder.setIcon(R.drawable.ic_remove_circle);
         builder.setTitle("Konfirmasi");
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                myDB.deleteTransaksi(Integer.parseInt(txtIdBudget.getText().toString()));
+                myDB.deleteBudget(Integer.parseInt(txtIdBudget.getText().toString()));
                 finish();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

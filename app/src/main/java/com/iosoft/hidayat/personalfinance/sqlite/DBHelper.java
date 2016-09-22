@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class DBHelper{
 
     private static SQLiteDatabase myDB = null;
-    private static String tbTrans, tbKategori, tbAnggaran;
+    private static String tbTrans, tbKategori, tbAnggaran, tbNotif, tbSimpanan;
 
     public DBHelper(Context context){
 
@@ -46,14 +46,29 @@ public class DBHelper{
                 " jml_angg INTEGER, " +
                 " kat_angg INTEGER )";
 
+        tbSimpanan = "CREATE TABLE IF NOT EXISTS simpanan " +
+                    "( id_simpanan INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    " deskripsi TEXT," +
+                    " nominal_target INTEGER, "+
+                    " tgl_akhir TEXT," +
+                    " selesai INTEGER, " +
+                    " icon_simpanan TEXT)";
+
+
+        tbNotif = "CREATE TABLE IF NOT EXISTS notif "+
+                    "(id_notif INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                        "waktu_notif TEXT, "+
+                        "pesan TEXT)";
+
         //exec create table
         myDB.execSQL(tbTrans);
         myDB.execSQL(tbKategori);
         myDB.execSQL(tbAnggaran);
+        myDB.execSQL(tbSimpanan);
+        myDB.execSQL(tbNotif);
 
 
-
-        //-- sample kategori
+        //-- data default kategori
         myDB.execSQL("DELETE FROM kategori");
         myDB.execSQL("INSERT INTO kategori values('1','Makanan & Minuman','o','ic_cat_food')");
         myDB.execSQL("INSERT INTO kategori values('2','Tagihan & Utilitas','o','ic_cat_bill')");
@@ -77,22 +92,14 @@ public class DBHelper{
         myDB.execSQL("INSERT INTO kategori values('21','Dipinjamkan','o','ic_cat_loan')");
         myDB.execSQL("INSERT INTO kategori values('22','Pengeluaran Lain-lain','o','ic_cat_other_out')");
 
-        //-- sample data anggaran
-//        myDB.execSQL("DELETE FROM anggaran");
-
-//        String[] sqlAnggaran = new String[3];
-//
-//        sqlAnggaran[0] = "INSERT INTO anggaran(bulan, jml_angg, kat_angg) " +
-//                "VALUES('1609', 200000, 1)";
-//        sqlAnggaran[1] = "INSERT INTO anggaran(bulan, jml_angg, kat_angg) " +
-//                "VALUES('1609', 200000, 2)";
-//        sqlAnggaran[2] = "INSERT INTO anggaran(bulan, jml_angg, kat_angg) " +
-//                "VALUES('1609', 150000, 3)";
-//
-//        for (int i=0;i<sqlAnggaran.length;i++){
-//
-//            myDB.execSQL(sqlAnggaran[i]);
-//        }
+        //sample data simpanan
+        myDB.execSQL("DELETE FROM simpanan");
+        myDB.execSQL("INSERT INTO simpanan(deskripsi,nominal_target,selesai) " +
+                "VALUES ('Perpanjang SIM',150000,0)");
+        myDB.execSQL("INSERT INTO simpanan(deskripsi,nominal_target,selesai) " +
+                "VALUES ('HP Baru',1500000,0)");
+        myDB.execSQL("INSERT INTO simpanan(deskripsi,nominal_target,selesai) " +
+                "VALUES ('Tabungan Kurban',2500000,0)");
 
     }
 
@@ -114,12 +121,12 @@ public class DBHelper{
         return arrayDate;
     }
 
-    public ArrayList<HashMap<String, String>> getTransListByDate(String iDate){
+    public ArrayList<HashMap<String, String>> getTransListByParam(String param){
 
         ArrayList<HashMap<String, String>> arrayTrans = new ArrayList<HashMap<String, String>>();
 
         String sql = "SELECT * FROM transaksi INNER JOIN kategori ON transaksi.id_kat = kategori.id_kat";
-                sql+=" WHERE tgl='"+iDate+"' ORDER BY id_trans DESC;";
+                sql+=" WHERE "+param+" ORDER BY tgl DESC, id_trans DESC;";
 
         Cursor cursor = myDB.rawQuery(sql,null);
 
@@ -243,6 +250,7 @@ public class DBHelper{
                 hashMapBudget.put("icon", cursor.getString(cursor.getColumnIndex("icon_kat")));
                 hashMapBudget.put("id_category", cursor.getString(cursor.getColumnIndex("kat_angg")));
                 hashMapBudget.put("budget_amount", cursor.getString(cursor.getColumnIndex("jml_angg")));
+                hashMapBudget.put("budget_month", cursor.getString(cursor.getColumnIndex("bulan")));
 
                 arrayBudget.add(hashMapBudget);
 
@@ -274,6 +282,23 @@ public class DBHelper{
 
         myDB.execSQL(sql);
     }
+
+    public void updateBudget(int id_anggaran,  int jml_anggaran, int kat_anggaran){
+
+        String sql = "UPDATE anggaran SET jml_angg="+jml_anggaran+", "+
+                                            "kat_angg="+kat_anggaran+
+                        " WHERE id_angg="+id_anggaran;
+
+        myDB.execSQL(sql);
+    }
+
+    public void deleteBudget(int id_budget){
+
+        String sql = "DELETE FROM anggaran WHERE id_angg='"+id_budget+"'";
+
+        myDB.execSQL(sql);
+    }
+
     public boolean validBudget(String bulan, int kat_angg){
 
         boolean validBudget;
@@ -291,5 +316,27 @@ public class DBHelper{
         }
 
         return validBudget;
+    }
+
+    public int getBudgetAmount(String bulan, int kategori){
+
+        int amount;
+
+        String sql = "SELECT jml_angg FROM anggaran WHERE bulan='"+bulan+"' AND kat_angg="+kategori;
+        Cursor iCur = myDB.rawQuery(sql,null);
+
+        iCur.moveToFirst();
+
+        amount = iCur.getInt(0);
+
+        return amount;
+    }
+
+    public void saveNotif(String notif_time, String notif_message){
+
+        String sql = "INSERT INTO notif(waktu_notif,pesan) "+
+                        "VALUES('"+notif_time+"','"+notif_message+"')";
+
+        myDB.execSQL(sql);
     }
 }

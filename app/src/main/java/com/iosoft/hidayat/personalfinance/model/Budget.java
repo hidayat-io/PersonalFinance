@@ -8,7 +8,7 @@ import android.os.Parcelable;
  */
 public class Budget implements Parcelable{
 
-    private String desc, icon;
+    private String desc, icon, budget_month;
     private int id_budget;
     private int id_category;
     private int budget_amount;
@@ -22,10 +22,12 @@ public class Budget implements Parcelable{
         id_category = source.readInt();
         budget_amount = source.readInt();
         budget_used = source.readInt();
+        budget_month = source.readString();
     }
 
     public Budget(int id_budget, String desc, String icon,
-                        int id_category, int budget_amount, int budget_used){
+                        int id_category, int budget_amount,
+                        int budget_used, String budget_month){
 
         this.id_budget = id_budget;
         this.desc = desc;
@@ -33,6 +35,7 @@ public class Budget implements Parcelable{
         this.id_category = id_category;
         this.budget_amount = budget_amount;
         this.budget_used = budget_used;
+        this.budget_month = budget_month;
     }
 
     public int getIdBudget(){
@@ -95,6 +98,11 @@ public class Budget implements Parcelable{
         this.budget_used = budget_used;
     }
 
+    public String getBudget_month(){
+
+        return budget_month;
+    }
+
     @Override
     public int describeContents() {
 
@@ -110,6 +118,7 @@ public class Budget implements Parcelable{
         dest.writeInt(id_category);
         dest.writeInt(budget_amount);
         dest.writeInt(budget_used);
+        dest.writeString(budget_month);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator(){
