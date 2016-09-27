@@ -317,11 +317,11 @@ public class DBHelper{
         String sql = "SELECT jml_angg FROM anggaran WHERE bulan='"+bulan+"' AND kat_angg="+kategori;
         Cursor iCur = myDB.rawQuery(sql,null);
 
-        if(iCur.moveToFirst()){
+        if(iCur.getCount()>0){
 
+            iCur.moveToFirst();
             amount = iCur.getInt(0);
-        };
-
+        }
 
         return amount;
     }
