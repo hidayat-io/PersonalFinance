@@ -21,27 +21,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="8dp"
-                android:onClick="showCategoryChoice"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/imgCateg"
+                    android:id="@+id/imgSavingIco"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center_vertical"
-                    android:onClick="showCategoryChoice"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_cat_form" />
+                    android:src="@drawable/ic_saving" />
 
                 <EditText
-                    android:id="@+id/txtKat"
+                    android:id="@+id/txtSavingDesc"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:hint="@string/text_kategori"
-                    android:onClick="showCategoryChoice"
+                    android:hint="@string/text_nama_simpanan"
+                    android:inputType="textCapWords"
                     android:layout_marginLeft="4dp"/>
             </LinearLayout>
 
@@ -64,37 +60,49 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="@string/text_nominal"
+                    android:hint="@string/text_nominal_target_simpanan"
                     android:inputType="number"
                     android:layout_marginLeft="4dp"/>
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btnDelete"
+            <RelativeLayout
+                android:id="@+id/layoutSavingAction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:drawableLeft="@drawable/ic_remove_circle"
-                android:onClick="deleteBudget"
-                android:text="  Hapus Anggaran"
-                android:textAllCaps="false" />
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal">
+
+                <Button
+                    android:id="@+id/btnDeposit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="depositSaving"
+                    android:text="@string/title_simpan_dana"
+                    android:layout_marginRight="8dp"
+                    android:textAllCaps="false"
+                    android:width="130dp"
+                    android:drawableTop="@drawable/ic_deposit"
+                    android:textColor="#8e44ad"/>
+
+                <Button
+                    android:layout_toRightOf="@id/btnDeposit"
+                    android:id="@+id/btnWithdraw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="withdrawSaving"
+                    android:text="@string/title_ambil_dana"
+                    android:textAllCaps="false"
+                    android:width="130dp"
+                    android:drawableTop="@drawable/ic_withdraw"
+                    android:textColor="#8e44ad"/>
+
+
+
+            </RelativeLayout>
 
             <!--hidden param -->
             <EditText
-                android:id="@+id/txtIdKat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
-
-            <EditText
-                android:id="@+id/txtTypeKat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
-
-            <EditText
-                android:id="@+id/txtIdBudget"
+                android:id="@+id/txtIdSaving"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone" />

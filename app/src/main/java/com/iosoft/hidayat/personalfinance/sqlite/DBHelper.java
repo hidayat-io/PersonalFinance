@@ -92,14 +92,6 @@ public class DBHelper{
         myDB.execSQL("INSERT INTO kategori values('21','Dipinjamkan','o','ic_cat_loan')");
         myDB.execSQL("INSERT INTO kategori values('22','Pengeluaran Lain-lain','o','ic_cat_other_out')");
 
-        //sample data simpanan
-        myDB.execSQL("DELETE FROM simpanan");
-        myDB.execSQL("INSERT INTO simpanan(deskripsi,nominal_target,selesai) " +
-                "VALUES ('Perpanjang SIM',150000,0)");
-        myDB.execSQL("INSERT INTO simpanan(deskripsi,nominal_target,selesai) " +
-                "VALUES ('HP Baru',1500000,0)");
-        myDB.execSQL("INSERT INTO simpanan(deskripsi,nominal_target,selesai) " +
-                "VALUES ('Tabungan Kurban',2500000,0)");
 
     }
 
@@ -182,10 +174,10 @@ public class DBHelper{
     }
 
     public void saveTransaksi(String tgl,String  tipe, int id_kategori,
-                              String keterangan, int nominal){
+                              String keterangan, int nominal, int id_simpanan){
 
-        String sql = "INSERT INTO transaksi('tipe','id_kat','desk','nominal','tgl') " +
-                "VALUES('"+tipe+"',"+id_kategori+","+"'"+keterangan+"',"+nominal+","+"'"+tgl+"')";
+        String sql = "INSERT INTO transaksi('tipe','id_kat','desk','nominal','tgl','id_simp') " +
+                "VALUES('"+tipe+"',"+id_kategori+","+"'"+keterangan+"',"+nominal+","+"'"+tgl+"',"+id_simpanan+")";
 
         myDB.execSQL(sql);
     }
@@ -215,8 +207,8 @@ public class DBHelper{
 
         int[] iAmount = new int[2];
 
-        String sql = "select (select sum(nominal) from transaksi where tipe='i') as pemasukan, \n" +
-                "\t(select sum(nominal) from transaksi where tipe='o') as pengeluaran";
+        String sql = "select (select sum(nominal) from transaksi where tipe='i') as pemasukan, " +
+                " (select sum(nominal) from transaksi where tipe='o') as pengeluaran";
 
         Cursor icur = myDB.rawQuery(sql,null);
 
@@ -320,14 +312,16 @@ public class DBHelper{
 
     public int getBudgetAmount(String bulan, int kategori){
 
-        int amount;
+        int amount = 0;
 
         String sql = "SELECT jml_angg FROM anggaran WHERE bulan='"+bulan+"' AND kat_angg="+kategori;
         Cursor iCur = myDB.rawQuery(sql,null);
 
-        iCur.moveToFirst();
+        if(iCur.moveToFirst()){
 
-        amount = iCur.getInt(0);
+            amount = iCur.getInt(0);
+        };
+
 
         return amount;
     }
@@ -336,6 +330,64 @@ public class DBHelper{
 
         String sql = "INSERT INTO notif(waktu_notif,pesan) "+
                         "VALUES('"+notif_time+"','"+notif_message+"')";
+
+        myDB.execSQL(sql);
+    }
+
+    public ArrayList<HashMap<String, String>> getListSaving(){
+
+        ArrayList<HashMap<String, String>> arraySaving = new ArrayList<>();
+
+        String sql = "SELECT * FROM simpanan ORDER BY selesai, id_simpanan DESC";
+
+        Cursor cursor = myDB.rawQuery(sql, null);
+
+        if(cursor.moveToFirst()){
+
+            do{
+
+                HashMap<String, String> hashMapSaving = new HashMap<>();
+
+                hashMapSaving.put("saving_id", cursor.getString(cursor.getColumnIndex("id_simpanan")));
+                hashMapSaving.put("saving_desc", cursor.getString(cursor.getColumnIndex("deskripsi")));
+                hashMapSaving.put("saving_target", cursor.getString(cursor.getColumnIndex("nominal_target")));
+                hashMapSaving.put("end_date", cursor.getString(cursor.getColumnIndex("tgl_akhir")));
+                hashMapSaving.put("is_done", cursor.getString(cursor.getColumnIndex("selesai")));
+                hashMapSaving.put("saving_icon", cursor.getString(cursor.getColumnIndex("icon_simpanan")));
+
+                arraySaving.add(hashMapSaving);
+
+            }while(cursor.moveToNext());
+        }
+
+        return arraySaving;
+    }
+
+    public int getSavingBalance(int id_saving){
+
+        String sql  = "SELECT (SELECT IFNULL(SUM(nominal),0) FROM transaksi WHERE tipe='o' AND id_simp='"+id_saving+"')-" +
+                "(SELECT IFNULL(SUM(nominal),0) FROM transaksi WHERE tipe='i' AND id_simp='"+id_saving+"') AS pengeluaran";
+
+        Cursor iCur = myDB.rawQuery(sql,null);
+
+        iCur.moveToFirst();
+
+        int savingBalance = iCur.getInt(0);
+
+        return savingBalance;
+    }
+
+    public void saveSavingPlan(String saving_description, int target_amount){
+
+        String sql = "INSERT INTO simpanan(deskripsi,nominal_target,selesai,icon_simpanan) " +
+                "VALUES ('"+saving_description+"',"+target_amount+",0,'ic_saving')";
+
+        myDB.execSQL(sql);
+    }
+
+    public void updateSavingPlan(String saving_description, int target_amount, int id_saving){
+
+        String sql  = "UPDATE simpanan SET deskripsi='"+saving_description+"', nominal_target="+target_amount+" WHERE id_simpanan='"+id_saving+"'";
 
         myDB.execSQL(sql);
     }

@@ -3,6 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/btrDel"
+        app:showAsAction="always|withText"
+        android:icon="@drawable/ic_trash"
+        android:visible="false"
+        android:title="Simpan">
+    </item>
+    <item
         android:id="@+id/btrTransOk"
         app:showAsAction="always|withText"
         android:icon="@drawable/ic_done"

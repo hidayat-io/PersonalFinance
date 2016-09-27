@@ -10,6 +10,14 @@
     <string name="text_kategori">Pilih Kategori</string>
     <string name="text_keterangan">Keterangan</string>
     <string name="text_tanggal">Tanggal</string>
+
     <string name="title_new_budget">Anggaran Baru</string>
     <string name="title_update_budget">Update Anggaran</string>
+
+    <string name="title_simpanan_new">Tambah Simpanan Baru</string>
+    <string name="text_nama_simpanan">Deskripsi Simpanan</string>
+    <string name="text_nominal_target_simpanan">Nominal Target</string>
+    <string name="title_update_simpanan">Update Simpanan</string>
+    <string name="title_simpan_dana">Simpan Dana</string>
+    <string name="title_ambil_dana">Ambil Dana</string>
 </resources>

@@ -38,6 +38,11 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.CategoryChoice">
         </activity>
+        <activity
+            android:name="com.iosoft.hidayat.personalfinance.SavingNew"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NewDialog">
+        </activity>
     </application>
 
 

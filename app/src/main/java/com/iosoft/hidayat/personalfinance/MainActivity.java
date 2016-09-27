@@ -114,8 +114,6 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
         Class fragmentClass = null;
 
-
-
         if (id == R.id.nav_transaction) {
 
             fragmentClass = FragmentTrans.class;
@@ -130,7 +128,7 @@ public class MainActivity extends AppCompatActivity
         }
         else if(id==R.id.nav_category){
 
-            fragmentClass = FragmentCategoryIn.class;
+            fragmentClass = FragmentCategory.class;
         }
 
         try{

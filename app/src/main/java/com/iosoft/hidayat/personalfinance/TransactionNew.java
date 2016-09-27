@@ -312,7 +312,7 @@ public class TransactionNew extends AppCompatActivity {
 
         if(idTrans.matches("")){ //new transaction
 
-            myDB.saveTransaksi(dateForSave, iType, intCat, iDesc, iAmount);
+            myDB.saveTransaksi(dateForSave, iType, intCat, iDesc, iAmount, 0);
         }
         else{ //update transaction
 
