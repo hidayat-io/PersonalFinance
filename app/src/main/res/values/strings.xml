@@ -20,4 +20,8 @@
     <string name="title_update_simpanan">Update Simpanan</string>
     <string name="title_simpan_dana">Simpan Dana</string>
     <string name="title_ambil_dana">Ambil Dana</string>
+
+    <string name="nama_kategori">Nama Kategori</string>
+    <string name="pengeluaran">Pengeluaran</string>
+    <string name="pemasukan">Pemasukan</string>
 </resources>

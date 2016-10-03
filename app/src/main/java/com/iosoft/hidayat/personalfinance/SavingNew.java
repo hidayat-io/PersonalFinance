@@ -461,7 +461,7 @@ public class SavingNew extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                myDB.deleteBudget(Integer.parseInt(txtIdSaving.getText().toString()));
+                myDB.deleteSavingPlan(Integer.parseInt(txtIdSaving.getText().toString()));
                 finish();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

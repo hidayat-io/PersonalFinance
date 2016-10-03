@@ -38,7 +38,9 @@ public class DBHelper{
                 "( id_kat INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 " nama_kat TEXT, " +
                 " tipe_trans TEXT, " +
-                " icon_kat TEXT )";
+                " icon_kat TEXT, " +
+                " sequence INT, " +
+                " is_del INTEGER )";
 
         tbAnggaran = "CREATE TABLE IF NOT EXISTS anggaran " +
                 "( id_angg INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -68,29 +70,32 @@ public class DBHelper{
         myDB.execSQL(tbNotif);
 
 
-        //-- data default kategori
-        myDB.execSQL("DELETE FROM kategori");
-        myDB.execSQL("INSERT INTO kategori values('1','Makanan & Minuman','o','ic_cat_food')");
-        myDB.execSQL("INSERT INTO kategori values('2','Tagihan & Utilitas','o','ic_cat_bill')");
-        myDB.execSQL("INSERT INTO kategori values('3','Teman & Kekasih','o','ic_cat_friend')");
-        myDB.execSQL("INSERT INTO kategori values('4','Gaji','i','ic_cat_salary')");
-        myDB.execSQL("INSERT INTO kategori values('5','Award','i','ic_cat_award')");
-        myDB.execSQL("INSERT INTO kategori values('6','Hadiah','i','ic_cat_gift')");
-        myDB.execSQL("INSERT INTO kategori values('7','Penjualan','i','ic_cat_sell')");
-        myDB.execSQL("INSERT INTO kategori values('8','Pinjaman','i','ic_cat_debt')");
-        myDB.execSQL("INSERT INTO kategori values('9','Pemasukan Lain-lain','i','ic_cat_other_in')");
-        myDB.execSQL("INSERT INTO kategori values('10','Simpanan','o','ic_saving')");
-        myDB.execSQL("INSERT INTO kategori values('11','Hiburan','o','ic_cat_entertainment')");
-        myDB.execSQL("INSERT INTO kategori values('12','Pendidikan','o','ic_cat_education')");
-        myDB.execSQL("INSERT INTO kategori values('13','Keluarga','o','ic_cat_family')");
-        myDB.execSQL("INSERT INTO kategori values('14','Rumah Tangga','o','ic_cat_home')");
-        myDB.execSQL("INSERT INTO kategori values('15','Investasi','o','ic_cat_invest')");
-        myDB.execSQL("INSERT INTO kategori values('17','Kesehatan','o','ic_cat_medical')");
-        myDB.execSQL("INSERT INTO kategori values('18','Belanja','o','ic_cat_shopping')");
-        myDB.execSQL("INSERT INTO kategori values('19','Transportasi','o','ic_cat_transport')");
-        myDB.execSQL("INSERT INTO kategori values('20','Travel','o','ic_cat_travel')");
-        myDB.execSQL("INSERT INTO kategori values('21','Dipinjamkan','o','ic_cat_loan')");
-        myDB.execSQL("INSERT INTO kategori values('22','Pengeluaran Lain-lain','o','ic_cat_other_out')");
+        //-- data default kategori, if empty insert default data
+        Cursor icur = myDB.rawQuery("SELECT * FROM kategori",null);
+
+        if(icur.getCount() < 1){
+
+            myDB.execSQL("INSERT INTO kategori values('1','Makanan & Minuman','o','ic_cat_food',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('2','Tagihan & Utilitas','o','ic_cat_bill',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('3','Teman & Kekasih','o','ic_cat_friend',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('4','Gaji','i','ic_cat_salary',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('5','Award','i','ic_cat_award',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('6','Hadiah','i','ic_cat_gift',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('7','Penjualan','i','ic_cat_sell',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('8','Pinjaman','i','ic_cat_debt',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('9','Pemasukan Lain-lain','i','ic_cat_other_in',1,0)");
+            myDB.execSQL("INSERT INTO kategori values('10','Hiburan','o','ic_cat_entertainment',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('11','Pendidikan','o','ic_cat_education',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('12','Keluarga','o','ic_cat_family',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('13','Rumah Tangga','o','ic_cat_home',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('14','Investasi','o','ic_cat_invest',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('15','Kesehatan','o','ic_cat_medical',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('16','Belanja','o','ic_cat_shopping',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('17','Transportasi','o','ic_cat_transport',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('18','Travel','o','ic_cat_travel',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('19','Dipinjamkan','o','ic_cat_loan',0,0)");
+            myDB.execSQL("INSERT INTO kategori values('20','Pengeluaran Lain-lain','o','ic_cat_other_out',1,0)");
+        }
 
 
     }
@@ -143,34 +148,6 @@ public class DBHelper{
         }
 
         return arrayTrans;
-    }
-
-    public ArrayList<HashMap<String, String>> getCategoryByParam(String param){
-
-        ArrayList<HashMap<String, String>> arrayCategory = new ArrayList<>();
-
-        String sql = "SELECT * FROM kategori WHERE " + param;
-            sql += " ORDER BY id_kat";
-
-        Cursor cursor = myDB.rawQuery(sql, null);
-
-        if(cursor.moveToFirst()){
-
-            do{
-
-                HashMap<String, String> hashMapCategory = new HashMap<>();
-
-                hashMapCategory.put("id", cursor.getString(0));
-                hashMapCategory.put("desk", cursor.getString(1));
-                hashMapCategory.put("type", cursor.getString(2));
-                hashMapCategory.put("cat_ico", cursor.getString(3));
-
-                arrayCategory.add(hashMapCategory);
-
-            }while(cursor.moveToNext());
-        }
-
-        return arrayCategory;
     }
 
     public void saveTransaksi(String tgl,String  tipe, int id_kategori,
@@ -388,6 +365,65 @@ public class DBHelper{
     public void updateSavingPlan(String saving_description, int target_amount, int id_saving){
 
         String sql  = "UPDATE simpanan SET deskripsi='"+saving_description+"', nominal_target="+target_amount+" WHERE id_simpanan='"+id_saving+"'";
+
+        myDB.execSQL(sql);
+    }
+
+    public void deleteSavingPlan(int idSaving){
+
+        String sql = "DELETE FROM simpanan WHERE id_simpanan = '"+idSaving+"'";
+
+        myDB.execSQL(sql);
+    }
+
+    public ArrayList<HashMap<String, String>> getCategoryByParam(String param){
+
+        ArrayList<HashMap<String, String>> arrayCategory = new ArrayList<>();
+
+        String sql = "SELECT * FROM kategori WHERE  " + param;
+        sql +=" ORDER BY " +
+                "CASE WHEN tipe_trans='o' THEN 0 " +
+                "WHEN tipe_trans='i' THEN 1 END,sequence,id_kat";
+
+        Cursor cursor = myDB.rawQuery(sql, null);
+
+        if(cursor.moveToFirst()){
+
+            do{
+
+                HashMap<String, String> hashMapCategory = new HashMap<>();
+
+                hashMapCategory.put("id", cursor.getString(0));
+                hashMapCategory.put("desk", cursor.getString(1));
+                hashMapCategory.put("type", cursor.getString(2));
+                hashMapCategory.put("cat_ico", cursor.getString(3));
+
+                arrayCategory.add(hashMapCategory);
+
+            }while(cursor.moveToNext());
+        }
+
+        return arrayCategory;
+    }
+
+    public void SaveNewCategory(String nama_kategori, String tipe_transaksi, String icon){
+
+        String sql = "INSERT INTO kategori(nama_kat,tipe_trans,icon_kat,is_del,sequence) " +
+                "VALUES('"+nama_kategori+"','"+tipe_transaksi+"','"+icon+"',0,0) ";
+
+        myDB.execSQL(sql);
+    }
+
+    public void updateCategory(String nama_kategori, String tipe_kategori, int id_kategori){
+
+        String sql = "UPDATE kategori set nama_kat='"+nama_kategori+"', tipe_trans='"+tipe_kategori+"' WHERE id_kat="+id_kategori;
+
+        myDB.execSQL(sql);
+    }
+
+    public void deleteCategory(int id_kategori){
+
+        String sql = "DELETE FROM kategori WHERE id_kat="+id_kategori;
 
         myDB.execSQL(sql);
     }
