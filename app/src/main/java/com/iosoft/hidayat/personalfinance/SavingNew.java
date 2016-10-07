@@ -359,7 +359,7 @@ public class SavingNew extends AppCompatActivity {
                 String savingDesc = txtSavingDesc.getText().toString();
                 int savingId = Integer.parseInt(txtIdSaving.getText().toString());
 
-                myDB.saveTransaksi(dateForSave, "o", 22, "Simpan dana ke Simpanan "+savingDesc, iAmount, savingId);
+                myDB.saveTransaksi(dateForSave, "o", 20, "Simpan dana ke Simpanan "+savingDesc, iAmount, savingId);
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

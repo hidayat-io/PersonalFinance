@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class DBHelper{
 
     private static SQLiteDatabase myDB = null;
-    private static String tbTrans, tbKategori, tbAnggaran, tbNotif, tbSimpanan;
+    private static String tbTrans, tbKategori, tbAnggaran, tbNotif, tbSimpanan, tbSetting;
 
     public DBHelper(Context context){
 
@@ -25,6 +25,11 @@ public class DBHelper{
         myDB = context.openOrCreateDatabase("pfDB.db", Context.MODE_PRIVATE, null);
 
         //string query create table
+
+        tbSetting = "CREATE TABLE IF NOT EXISTS app_setting " +
+                " (nama TEXT, " +
+                " value TEXT)";
+
         tbTrans = "CREATE TABLE IF NOT EXISTS transaksi " +
                 "( id_trans INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 " tgl TEXT, " +
@@ -68,6 +73,7 @@ public class DBHelper{
         myDB.execSQL(tbAnggaran);
         myDB.execSQL(tbSimpanan);
         myDB.execSQL(tbNotif);
+        myDB.execSQL(tbSetting);
 
 
         //-- data default kategori, if empty insert default data
@@ -97,6 +103,13 @@ public class DBHelper{
             myDB.execSQL("INSERT INTO kategori values('20','Pengeluaran Lain-lain','o','ic_cat_other_out',1,0)");
         }
 
+        //-- default setting
+        Cursor iSett = myDB.rawQuery("SELECT * FROM app_setting",null);
+
+        if(iSett.getCount() < 1){
+
+            myDB.execSQL("INSERT INTO app_setting VALUES('pwd','1234')");
+        }
 
     }
 
@@ -426,5 +439,16 @@ public class DBHelper{
         String sql = "DELETE FROM kategori WHERE id_kat="+id_kategori;
 
         myDB.execSQL(sql);
+    }
+
+    public String getLoginPass(){
+
+        Cursor iCur = myDB.rawQuery("SELECT value FROM app_setting WHERE nama='pwd'",null);
+
+        iCur.moveToFirst();
+
+        String appPwd = iCur.getString(0);
+
+        return appPwd;
     }
 }
